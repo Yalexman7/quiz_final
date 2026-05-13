@@ -1,0 +1,1611 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Quiz 2º DAW · 5 asignaturas</title>
+   <style>
+      :root {
+         --bg1: #0b1020;
+         --bg2: #0f1b3d;
+         --card: rgba(255, 255, 255, .08);
+         --card2: rgba(255, 255, 255, .12);
+         --stroke: rgba(255, 255, 255, .14);
+         --text: rgba(255, 255, 255, .92);
+         --muted: rgba(255, 255, 255, .65);
+         --good: #22c55e;
+         --bad: #ef4444;
+         --accent: #60a5fa;
+         --accent2: #a78bfa;
+         --shadow: 0 20px 60px rgba(0, 0, 0, .45);
+         --radius: 22px;
+         --radius2: 16px;
+         --maxw: 980px;
+         --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      }
+
+      * {
+         box-sizing: border-box
+      }
+
+      body {
+         margin: 0;
+         font-family: var(--font);
+         color: var(--text);
+         min-height: 100svh;
+         background:
+            radial-gradient(1000px 600px at 15% 10%, rgba(167, 139, 250, .22), transparent 60%),
+            radial-gradient(900px 500px at 90% 25%, rgba(96, 165, 250, .20), transparent 55%),
+            linear-gradient(180deg, var(--bg1), var(--bg2));
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         padding: 24px;
+      }
+
+      .shell {
+         width: min(var(--maxw), 100%);
+         display: grid;
+         gap: 16px;
+      }
+
+      .topbar {
+         display: flex;
+         align-items: center;
+         justify-content: space-between;
+         gap: 16px;
+         padding: 14px 16px;
+         border: 1px solid var(--stroke);
+         background: linear-gradient(180deg, rgba(255, 255, 255, .10), rgba(255, 255, 255, .06));
+         border-radius: var(--radius);
+         box-shadow: var(--shadow);
+         backdrop-filter: blur(10px);
+      }
+
+      .brand {
+         display: flex;
+         align-items: center;
+         gap: 12px;
+         min-width: 220px;
+      }
+
+      .logo {
+         width: 38px;
+         height: 38px;
+         border-radius: 12px;
+         background: conic-gradient(from 200deg, var(--accent), var(--accent2), var(--accent));
+         box-shadow: 0 10px 30px rgba(96, 165, 250, .25);
+         border: 1px solid rgba(255, 255, 255, .25);
+      }
+
+      .brand h1 {
+         font-size: 14px;
+         letter-spacing: .12em;
+         text-transform: uppercase;
+         margin: 0;
+         color: rgba(255, 255, 255, .85);
+      }
+
+      .brand small {
+         display: block;
+         margin-top: 2px;
+         font-size: 12px;
+         color: var(--muted);
+         letter-spacing: 0;
+         text-transform: none;
+      }
+
+      .meta {
+         display: flex;
+         align-items: center;
+         gap: 12px;
+         flex-wrap: wrap;
+         justify-content: flex-end;
+      }
+
+      .pill {
+         border: 1px solid var(--stroke);
+         background: rgba(255, 255, 255, .06);
+         padding: 8px 12px;
+         border-radius: 999px;
+         font-size: 13px;
+         color: rgba(255, 255, 255, .78);
+         display: flex;
+         align-items: center;
+         gap: 8px;
+         white-space: nowrap;
+      }
+
+      .dot {
+         width: 8px;
+         height: 8px;
+         border-radius: 999px;
+         background: var(--accent);
+         box-shadow: 0 0 0 6px rgba(96, 165, 250, .18);
+      }
+
+      .progressWrap {
+         width: min(380px, 100%);
+         border: 1px solid var(--stroke);
+         background: rgba(255, 255, 255, .06);
+         border-radius: 999px;
+         overflow: hidden;
+         height: 12px;
+      }
+
+      .progress {
+         height: 100%;
+         width: 0%;
+         background: linear-gradient(90deg, var(--accent), var(--accent2));
+         border-radius: 999px;
+         transition: width .35s ease;
+      }
+
+      .card {
+         border: 1px solid var(--stroke);
+         background: linear-gradient(180deg, rgba(255, 255, 255, .10), rgba(255, 255, 255, .05));
+         border-radius: var(--radius);
+         box-shadow: var(--shadow);
+         backdrop-filter: blur(10px);
+         overflow: hidden;
+      }
+
+      .cardHeader {
+         padding: 18px 20px 14px;
+         border-bottom: 1px solid rgba(255, 255, 255, .10);
+         display: flex;
+         gap: 14px;
+         align-items: flex-start;
+         justify-content: space-between;
+         flex-wrap: wrap;
+      }
+
+      .kicker {
+         font-size: 12px;
+         letter-spacing: .14em;
+         text-transform: uppercase;
+         color: rgba(255, 255, 255, .70);
+      }
+
+      .qTitle {
+         margin: 6px 0 0;
+         font-size: 20px;
+         line-height: 1.25;
+         letter-spacing: -.01em;
+         max-width: 820px;
+         white-space: pre-wrap;
+      }
+
+      .content {
+         padding: 18px 20px 20px;
+         display: grid;
+         gap: 16px;
+      }
+
+      .home {
+         display: grid;
+         gap: 16px;
+      }
+
+      .subjectGrid {
+         display: grid;
+         grid-template-columns: repeat(2, minmax(0, 1fr));
+         gap: 12px;
+      }
+
+      button.subject {
+         text-align: left;
+         border: 1px solid var(--stroke);
+         background: rgba(255, 255, 255, .06);
+         color: var(--text);
+         padding: 16px;
+         border-radius: var(--radius2);
+         cursor: pointer;
+         transition: transform .08s ease, background .18s ease, border-color .18s ease;
+      }
+
+      button.subject:hover {
+         background: rgba(255, 255, 255, .10);
+         border-color: rgba(255, 255, 255, .22);
+         transform: translateY(-1px);
+      }
+
+      .subject strong {
+         display: block;
+         font-size: 16px;
+         margin-bottom: 6px;
+      }
+
+      .subject span {
+         color: var(--muted);
+         font-size: 13px;
+      }
+
+      .options {
+         display: grid;
+         gap: 12px;
+      }
+
+      button.option {
+         width: 100%;
+         text-align: left;
+         border: 1px solid var(--stroke);
+         background: rgba(255, 255, 255, .06);
+         color: var(--text);
+         padding: 14px 14px;
+         border-radius: var(--radius2);
+         cursor: pointer;
+         transition: transform .08s ease, background .18s ease, border-color .18s ease;
+         display: flex;
+         gap: 12px;
+         align-items: flex-start;
+      }
+
+      button.option:hover {
+         background: rgba(255, 255, 255, .10);
+         border-color: rgba(255, 255, 255, .22);
+         transform: translateY(-1px);
+      }
+
+      button.option:active {
+         transform: translateY(0px) scale(.998);
+      }
+
+      button.option:disabled {
+         cursor: not-allowed;
+         opacity: .8;
+      }
+
+      .badge {
+         flex: 0 0 auto;
+         width: 28px;
+         height: 28px;
+         border-radius: 10px;
+         display: grid;
+         place-items: center;
+         font-weight: 700;
+         font-size: 13px;
+         background: rgba(255, 255, 255, .10);
+         border: 1px solid rgba(255, 255, 255, .16);
+         color: rgba(255, 255, 255, .85);
+      }
+
+      .optText {
+         line-height: 1.35;
+         font-size: 15px;
+         color: rgba(255, 255, 255, .88);
+         white-space: pre-wrap;
+      }
+
+      .footer {
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+         gap: 12px;
+         flex-wrap: wrap;
+         padding-top: 4px;
+      }
+
+      .btn {
+         border: 1px solid rgba(255, 255, 255, .18);
+         background: rgba(255, 255, 255, .08);
+         color: rgba(255, 255, 255, .88);
+         padding: 10px 14px;
+         border-radius: 14px;
+         cursor: pointer;
+         transition: background .18s ease, transform .08s ease, border-color .18s ease;
+         font-size: 14px;
+         display: inline-flex;
+         align-items: center;
+         gap: 10px;
+         user-select: none;
+      }
+
+      .btn:hover {
+         background: rgba(255, 255, 255, .12);
+         border-color: rgba(255, 255, 255, .26);
+         transform: translateY(-1px);
+      }
+
+      .btn:active {
+         transform: translateY(0px);
+      }
+
+      .btn.primary {
+         background: linear-gradient(90deg, rgba(96, 165, 250, .28), rgba(167, 139, 250, .24));
+         border-color: rgba(255, 255, 255, .22);
+      }
+
+      .btn.primary:hover {
+         background: linear-gradient(90deg, rgba(96, 165, 250, .34), rgba(167, 139, 250, .30));
+      }
+
+      .btn:disabled {
+         opacity: .55;
+         cursor: not-allowed;
+         transform: none;
+      }
+
+      .hint {
+         color: var(--muted);
+         font-size: 13px;
+         line-height: 1.35;
+      }
+
+      .correct {
+         border-color: rgba(34, 197, 94, .55) !important;
+         background: rgba(34, 197, 94, .14) !important;
+      }
+
+      .selected {
+         border-color: rgba(96, 165, 250, .55) !important;
+         background: rgba(96, 165, 250, .14) !important;
+      }
+
+      .wrong {
+         border-color: rgba(239, 68, 68, .55) !important;
+         background: rgba(239, 68, 68, .12) !important;
+      }
+
+      .explain {
+         border: 1px solid rgba(255, 255, 255, .14);
+         background: rgba(255, 255, 255, .06);
+         border-radius: var(--radius2);
+         padding: 14px 14px;
+         display: none;
+         gap: 8px;
+      }
+
+      .explain.show {
+         display: grid;
+      }
+
+      .explain strong {
+         font-size: 14px;
+         letter-spacing: .02em;
+      }
+
+      .explain p {
+         margin: 0;
+         color: rgba(255, 255, 255, .80);
+         line-height: 1.4;
+         font-size: 14px;
+      }
+
+      .result {
+         display: none;
+         text-align: center;
+         padding: 26px 18px 24px;
+      }
+
+      .result.show {
+         display: block;
+      }
+
+      .score {
+         font-size: 44px;
+         margin: 0;
+         letter-spacing: -.03em;
+      }
+
+      .result p {
+         margin: 10px auto 0;
+         max-width: 720px;
+         color: rgba(255, 255, 255, .78);
+         line-height: 1.5;
+      }
+
+      .tiny {
+         color: rgba(255, 255, 255, .55);
+         font-size: 12px;
+      }
+
+      @media (max-width: 720px) {
+         .subjectGrid {
+            grid-template-columns: 1fr;
+         }
+      }
+
+      @media (max-width: 620px) {
+         .brand {
+            min-width: unset;
+         }
+
+         .qTitle {
+            font-size: 18px;
+         }
+
+         .score {
+            font-size: 40px;
+         }
+      }
+   </style>
+</head>
+
+<body>
+   <div class="shell">
+      <div class="topbar">
+         <div class="brand">
+            <div class="logo" aria-hidden="true"></div>
+            <div>
+               <h1 id="brandTitle">Quiz Preguntas · 2º DAW</h1>
+               <small id="subtitle">Elige una asignatura</small>
+            </div>
+         </div>
+         <div class="meta">
+            <div class="pill"><span class="dot" aria-hidden="true"></span><span id="counter">Inicio</span></div>
+            <div class="progressWrap" aria-label="Progreso">
+               <div class="progress" id="progress"></div>
+            </div>
+            <button class="btn" id="btnHome" type="button" title="Volver al inicio">⌂ Inicio</button>
+            <button class="btn" id="btnReset" type="button" title="Reiniciar">↻ Reiniciar</button>
+         </div>
+      </div>
+      <div class="card" id="card">
+         <div class="cardHeader">
+            <div>
+               <div class="kicker" id="kicker">Selecciona asignatura</div>
+               <h2 class="qTitle" id="question"></h2>
+            </div>
+            <div class="pill" id="statePill" style="display:none;"></div>
+         </div>
+         <div class="content" id="content">
+            <div class="home" id="home"></div>
+            <div class="options" id="options"></div>
+            <div class="explain" id="explainBox">
+               <strong id="explainTitle">Explicación</strong>
+               <p id="explainText"></p>
+               <div class="tiny" id="explainTiny"></div>
+            </div>
+            <div class="footer" id="footer">
+               <div class="hint" id="hint"></div>
+               <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
+                  <button class="btn" id="btnPrev" type="button">← Anterior</button>
+                  <button class="btn primary" id="btnNext" type="button">Siguiente →</button>
+               </div>
+            </div>
+            <div class="result" id="result">
+               <p class="score" id="score">0 / 0</p>
+               <p id="resultText"></p>
+               <div style="margin-top:14px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+                  <button class="btn primary" id="btnRestart2" type="button">Repetir quiz</button>
+                  <button class="btn" id="btnHome2" type="button">Volver al inicio</button>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+   <script>
+      const subjects = [
+         {
+            "name": "Ciberseguridad",
+            "code": "CIBER",
+            "questions": [
+               {
+                  "title": "CIBER · Pregunta 16",
+                  "q": "16. En una plataforma de gestión de historiales clínicos, un atacante consigue acceder sin autorización a los datos de varios pacientes, incluyendo información médica sensible. Sin embargo, no realiza ninguna modificación en los registros ni provoca interrupciones en el funcionamiento del sistema, que continúa siendo accesible para los usuarios legítimos. Desde el punto de vista de los principios fundamentales de la seguridad de la información, ¿qué pilar se ha visto comprometido de forma directa?",
+                  "opts": [
+                     "    a. Integridad",
+                     "    b. Disponibilidad",
+                     "    c. Confidencialidad",
+                     "    d. Autenticación"
+                  ],
+                  "correct": 2,
+                  "exp": "La opción correcta señala la confidencialidad, porque el problema descrito es el acceso no autorizado a información sensible, no su modificación ni la caída del servicio."
+               },
+               {
+                  "title": "CIBER · Pregunta 17",
+                  "q": "17. Una empresa detecta una vulnerabilidad crítica en su servidor web que permite la ejecución remota de código sin necesidad de autenticación previa por parte del atacante, con posibilidad de control total sobre el sistema afectado. La vulnerabilidad presenta una puntuación CVSS de 9.8, considerada crítica. ¿Cuál es la actuación más adecuada desde el punto de vista de la gestión de vulnerabilidades?",
+                  "opts": [
+                     "    a. Incluir la vulnerabilidad en el calendario de mantenimiento periódico",
+                     "    b. Monitorizar el sistema sin aplicar medidas hasta detectar explotación real",
+                     "    c. Aplicar medidas de mitigación de forma inmediata y proceder al parcheo urgente",
+                     "    d. Ignorar la vulnerabilidad mientras no existan ataques confirmados"
+                  ],
+                  "correct": 2,
+                  "exp": "La respuesta correcta exige mitigación inmediata y parcheo urgente porque una vulnerabilidad crítica con ejecución remota de código implica un riesgo operativo alto."
+               },
+               {
+                  "title": "CIBER · Pregunta 18",
+                  "q": "18. En un entorno corporativo, varios empleados reciben correos electrónicos que simulan ser del departamento de soporte técnico solicitando sus credenciales de acceso mediante un enlace fraudulento. Algunos usuarios introducen su contraseña en dicho enlace. ¿Qué medida técnica es más eficaz para evitar que el atacante pueda acceder posteriormente a los sistemas utilizando esas credenciales comprometidas?",
+                  "opts": [
+                     "    a. Cambiar las contraseñas de forma periódica",
+                     "    b. Filtrar direcciones MAC en la red interna",
+                     "    c. Implementar autenticación multifactor en los sistemas de acceso",
+                     "    d. Bloquear el acceso a correos electrónicos externos"
+                  ],
+                  "correct": 2,
+                  "exp": "Es correcta porque la autenticación multifactor añade una barrera adicional aunque la contraseña haya sido comprometida."
+               },
+               {
+                  "title": "CIBER · Pregunta 19",
+                  "q": "19. Durante un ataque informático, un software malicioso ya instalado en un equipo intenta comunicarse con un servidor remoto controlado por el atacante para recibir instrucciones adicionales y enviar información comprometida. Si el sistema de seguridad bloquea este tráfico saliente, ¿qué fase del modelo de ataque se está interrumpiendo?",
+                  "opts": [
+                     "    a. Reconocimiento",
+                     "    b. Entrega",
+                     "    c. Explotación",
+                     "    d. Comando y control"
+                  ],
+                  "correct": 3,
+                  "exp": "Es correcta porque la comunicación con un servidor remoto del atacante para recibir órdenes corresponde a la fase de comando y control."
+               },
+               {
+                  "title": "CIBER · Pregunta 20",
+                  "q": "20. Una organización implementa un sistema de seguridad que analiza el tráfico de red en tiempo real y, además de detectar patrones sospechosos, es capaz de bloquear automáticamente las conexiones maliciosas sin intervención humana. ¿Qué tipo de sistema corresponde a esta descripción?",
+                  "opts": [
+                     "    a. Sistema de detección de intrusos (IDS)",
+                     "    b. Sistema de prevención de intrusos (IPS)",
+                     "    c. Cortafuegos tradicional basado en reglas",
+                     "    d. Sistema de gestión de eventos (SIEM)"
+                  ],
+                  "correct": 1,
+                  "exp": "Es correcta porque un IPS no solo detecta tráfico malicioso, sino que puede bloquearlo automáticamente."
+               },
+               {
+                  "title": "CIBER · Pregunta 21",
+                  "q": "21. En una aplicación web que requiere comunicaciones seguras, se utiliza cifrado asimétrico durante el establecimiento inicial de la conexión para intercambiar claves, y posteriormente se emplea cifrado simétrico para transmitir los datos. ¿Cuál es la razón técnica principal de este enfoque híbrido?",
+                  "opts": [
+                     "    a. El cifrado asimétrico no es seguro para proteger datos",
+                     "    b. El cifrado simétrico no permite autenticar usuarios",
+                     "  c. El cifrado asimétrico es computacionalmente más costoso y menos eficiente para grandes volúmenes de datos",
+                     "    d. El cifrado simétrico no garantiza la confidencialidad"
+                  ],
+                  "correct": 2,
+                  "exp": "Es correcta porque el cifrado asimétrico se usa para el intercambio inicial de claves y el simétrico resulta más eficiente para transmitir grandes volúmenes de datos."
+               },
+               {
+                  "title": "CIBER · Pregunta 22",
+                  "q": "22. En entornos industriales, se diseña una arquitectura de red que incluye una zona intermedia destinada a separar la red corporativa (IT) de los sistemas de control industrial (OT), con el objetivo de reducir la superficie de ataque y controlar las comunicaciones entre ambas. ¿Cómo se denomina esta zona en el modelo Purdue?",
+                  "opts": [
+                     "    a. Nivel 1",
+                     "    b. Nivel 2",
+                     "    c. Nivel 3.5 (zona desmilitarizada industrial)",
+                     "    d. Nivel 5"
+                  ],
+                  "correct": 2,
+                  "exp": "Es correcta porque en el modelo Purdue la zona intermedia entre IT y OT se identifica como nivel 3.5 o DMZ industrial."
+               },
+               {
+                  "title": "CIBER · Pregunta 23",
+                  "q": "23. Una empresa permite el acceso remoto de sus empleados a los sistemas internos mediante el uso de OpenVPN, utilizando cifrado robusto (AES-256) y autenticación multifactor. ¿Cuál es la principal ventaja de esta solución desde el punto de vista de la seguridad?",
+                  "opts": [
+                     "    a. Reduce la latencia de la conexión",
+                     "    b. Elimina la necesidad de utilizar cortafuegos en la red",
+                     "  c. Garantiza la confidencialidad de los datos en tránsito y una autenticación fuerte del usuario",
+                     "    d. Sustituye completamente la infraestructura de red interna"
+                  ],
+                  "correct": 2,
+                  "exp": "Es correcta porque la autenticación multifactor añade una barrera adicional aunque la contraseña haya sido comprometida."
+               },
+               {
+                  "title": "CIBER · Pregunta 24",
+                  "q": "24. En una infraestructura con sistemas críticos, se implementa un servidor de salto como único punto de acceso para los administradores. Este servidor actúa como intermediario obligatorio antes de acceder a los sistemas finales. ¿Cuál es el objetivo principal de esta arquitectura?",
+                  "opts": [
+                     "    a. Incrementar la velocidad de acceso a los sistemas internos",
+                     "    b. Evitar el uso de mecanismos de cifrado en las conexiones",
+                     "    c. Centralizar, controlar y auditar todos los accesos a los sistemas sensibles",
+                     "    d. Sustituir completamente el uso de redes privadas virtuales"
+                  ],
+                  "correct": 2,
+                  "exp": "Es correcta porque un servidor de salto concentra el acceso administrativo, facilitando control, autenticación y auditoría."
+               },
+               {
+                  "title": "CIBER · Pregunta 25",
+                  "q": "25. Una empresa adopta la estrategia de copias de seguridad conocida como regla 3-2-1, manteniendo tres copias de los datos, en dos tipos de soporte diferentes y una copia almacenada fuera de la ubicación principal. ¿Qué problema principal pretende mitigar esta estrategia?",
+                  "opts": [
+                     "    a. La lentitud en el acceso a los datos",
+                     "    b. El elevado coste del almacenamiento",
+                     "    c. La pérdida de datos ante fallos físicos, errores humanos o ciberataques",
+                     "    d. La congestión del tráfico de red"
+                  ],
+                  "correct": 2,
+                  "exp": "Es correcta porque la regla 3-2-1 reduce el riesgo de pérdida de datos combinando varias copias, soportes distintos y una copia externa."
+               },
+               {
+                  "title": "CIBER · Pregunta 26",
+                  "q": "26. En la planificación de recuperación ante desastres, se define un indicador que establece la cantidad máxima de datos que una organización puede permitirse perder en caso de incidente. ¿Qué indicador corresponde a esta definición?",
+                  "opts": [
+                     "    a. RTO",
+                     "    b. SLA",
+                     "    c. RPO",
+                     "    d. MTBF"
+                  ],
+                  "correct": 2,
+                  "exp": "Es correcta porque el RPO define cuánta pérdida de datos, medida en tiempo, puede tolerar la organización tras un incidente."
+               },
+               {
+                  "title": "CIBER · Pregunta 27",
+                  "q": "27. El protocolo WPA3 introduce el mecanismo de autenticación SAE (Simultaneous Authentication of Equals) como mejora respecto a WPA2. ¿Qué vulnerabilidad principal soluciona esta mejora?",
+                  "opts": [
+                     "    a. La baja velocidad de conexión en redes inalámbricas",
+                     "    b. La posibilidad de realizar ataques de diccionario offline sobre contraseñas capturadas",
+                     "    c. La ausencia de cifrado en las comunicaciones Wi-Fi",
+                     "    d. La incompatibilidad con dispositivos antiguos"
+                  ],
+                  "correct": 1,
+                  "exp": "Es correcta porque SAE dificulta los ataques de diccionario offline sobre contraseñas capturadas, una debilidad asociada a WPA2-PSK."
+               },
+               {
+                  "title": "CIBER · Pregunta 28",
+                  "q": "28. En un sistema de autenticación basado en el estándar 802.1X, intervienen diferentes componentes con funciones específicas. ¿Cuál es el encargado de validar las credenciales del usuario antes de permitir el acceso a la red?",
+                  "opts": [
+                     "    a. El supplicant (dispositivo cliente)",
+                     "    b. El authenticator (switch o punto de acceso)",
+                     "    c. El servidor RADIUS",
+                     "    d. El router de la red"
+                  ],
+                  "correct": 2,
+                  "exp": "Es correcta porque en 802.1X el servidor RADIUS valida las credenciales antes de autorizar el acceso a la red."
+               },
+               {
+                  "title": "CIBER · Pregunta 29",
+                  "q": "29. En el desarrollo de aplicaciones web, el uso de consultas parametrizadas en lugar de concatenar cadenas para construir sentencias SQL es una práctica recomendada de seguridad. ¿Cuál es la razón técnica que justifica esta recomendación?",
+                  "opts": [
+                     "    a. Elimina la necesidad de utilizar bases de datos",
+                     "   b. Separa el código SQL de los datos introducidos por el usuario, evitando que estos se interpreten como instrucciones",
+                     "    c. Filtra automáticamente las direcciones IP de los usuarios",
+                     "    d. Codifica toda la interfaz de la aplicación"
+                  ],
+                  "correct": 1,
+                  "exp": "Es correcta porque las consultas parametrizadas separan instrucciones SQL y datos de usuario, evitando que la entrada se interprete como código."
+               },
+               {
+                  "title": "CIBER · Pregunta 30",
+                  "q": "30. En un proceso de análisis forense digital, se realiza una copia bit a bit de un disco duro antes de comenzar el análisis del contenido. ¿Cuál es la razón principal de esta práctica?",
+                  "opts": [
+                     "    a. Aumentar la velocidad del análisis",
+                     "    b. Reducir el tamaño de los datos almacenados",
+                     "    c. Preservar la evidencia original sin alteraciones para mantener su validez legal",
+                     "    d. Facilitar la copia de archivos relevantes"
+                  ],
+                  "correct": 2,
+                  "exp": "Es correcta porque una copia bit a bit permite analizar sin alterar la evidencia original y conserva su validez legal."
+               }
+            ]
+         },
+         {
+            "name": "Desarrollo web en entorno cliente",
+            "code": "DWEC",
+            "questions": [
+               {
+                  "title": "DWEC · Pregunta 16",
+                  "q": "16. En el diseño de la funcionalidad “Reprogramar cita” en una aplicación web, se define un flujo en el que el cliente valida datos básicos (formato de fecha y campos obligatorios) antes de enviar una solicitud HTTP al servidor, que posteriormente aplica lógica de negocio y persiste los cambios. ¿Cuál es la justificación técnica más correcta de este reparto de responsabilidades?",
+                  "opts": [
+                     "    a. El cliente debe encargarse de toda la lógica para reducir carga del servidor",
+                     "    b. El servidor solo debe responder con datos sin aplicar validaciones",
+                     "    c. El cliente mejora la experiencia de usuario con validaciones rápidas, mientras el servidor garantiza integridad y seguridad",
+                     "    d. Ambos deben validar exactamente lo mismo por redundancia innecesaria"
+                  ],
+                  "correct": 2,
+                  "exp": "Es correcta porque JavaScript permite añadir comportamiento e interacción en el lado del cliente."
+               },
+               {
+                  "title": "DWEC · Pregunta 17",
+                  "q": "17. En una aplicación web que utiliza HTML5 semántico, se decide sustituir una estructura basada en múltiples  por elementos como , ,  y . ¿Cuál es el principal beneficio técnico de esta decisión?",
+                  "opts": [
+                     "    a. Mejora únicamente el diseño visual sin impacto estructural",
+                     "    b. Reduce el tamaño del archivo HTML de forma significativa",
+                     "    c. Mejora la accesibilidad, el SEO y la mantenibilidad del DOM",
+                     "    d. Permite ejecutar JavaScript más rápido"
+                  ],
+                  "correct": 2,
+                  "exp": "Es correcta porque responde a un criterio básico de accesibilidad y usabilidad de interfaces web."
+               },
+               {
+                  "title": "DWEC · Pregunta 18",
+                  "q": "18. En el desarrollo de un catálogo con carrito en JavaScript, se observa que la operación “5” + 5 produce un resultado inesperado para el cálculo de totales. ¿Qué explica correctamente este comportamiento?",
+                  "opts": [
+                     "    a. JavaScript convierte automáticamente todo a número",
+                     "    b. JavaScript concatena strings cuando uno de los operandos es texto",
+                     "    c. El operador + siempre suma valores numéricos",
+                     "    d. Es un error del navegador"
+                  ],
+                  "correct": 1,
+                  "exp": "Es correcta porque JavaScript permite añadir comportamiento e interacción en el lado del cliente."
+               },
+               {
+                  "title": "DWEC · Pregunta 19",
+                  "q": "19. En una implementación con XMLHttpRequest para filtrar productos sin recargar la página, se decide procesar la respuesta solo cuando readyState === 4 y status === 200. ¿Por qué es necesario este control?",
+                  "opts": [
+                     "    a. Para evitar ejecutar código antes de que la respuesta esté completa y sea válida",
+                     "    b. Porque readyState 4 indica que el navegador ha iniciado la petición",
+                     "    c. Porque status 200 indica error del servidor",
+                     "    d. Para mejorar el diseño visual de la interfaz"
+                  ],
+                  "correct": 0,
+                  "exp": "Es correcta porque la opción «Para evitar ejecutar código antes de que la respuesta esté completa y sea válida» responde de forma directa al concepto planteado en el enunciado."
+               },
+               {
+                  "title": "DWEC · Pregunta 20",
+                  "q": "20. En el diseño de un sistema de datos para un e-commerce, se decide almacenar pedidos en una base de datos relacional (SQL) y las fichas de producto en una base de datos documental (NoSQL). ¿Cuál es la razón principal de esta decisión?",
+                  "opts": [
+                     "    a. SQL es más rápido en todos los casos",
+                     "    b. NoSQL no permite almacenar datos complejos",
+                     "    c. SQL garantiza integridad transaccional y NoSQL aporta flexibilidad en atributos variables",
+                     "    d. Ambos sistemas se utilizan sin criterio técnico"
+                  ],
+                  "correct": 2,
+                  "exp": "Es correcta porque las consultas parametrizadas separan instrucciones SQL y datos de usuario, evitando que la entrada se interprete como código."
+               },
+               {
+                  "title": "DWEC · Pregunta 21",
+                  "q": "21. En una aplicación web que consume una API mediante Fetch, se implementa el siguiente patrón: comprobar response.ok, procesar con response.json() y capturar errores con catch. ¿Qué objetivo principal cumple esta estructura?",
+                  "opts": [
+                     "    a. Reducir el tamaño de la respuesta del servidor",
+                     "    b. Gestionar correctamente el flujo de éxito y error en la comunicación asíncrona",
+                     "    c. Evitar el uso de JSON en la aplicación",
+                     "    d. Sustituir completamente el backend"
+                  ],
+                  "correct": 1,
+                  "exp": "Es correcta porque JSON representa datos estructurados mediante pares clave-valor y listas, siendo habitual en el intercambio web."
+               },
+               {
+                  "title": "DWEC · Pregunta 22",
+                  "q": "22. En un sistema que expone datos en JSON y XML desde un endpoint, se elige JSON como formato principal para el cliente web moderno. ¿Cuál es la razón más adecuada?",
+                  "opts": [
+                     "    a. JSON es más seguro que XML por definición",
+                     "    b. JSON es más compacto y fácil de procesar en JavaScript",
+                     "    c. XML no puede representar estructuras complejas",
+                     "    d. JSON sustituye completamente a XML en todos los sistemas"
+                  ],
+                  "correct": 1,
+                  "exp": "Es correcta porque JavaScript permite añadir comportamiento e interacción en el lado del cliente."
+               },
+               {
+                  "title": "DWEC · Pregunta 23",
+                  "q": "23. Durante la validación de un sitio web con herramientas del W3C, se detectan errores en la jerarquía de encabezados y atributos alt ausentes en imágenes. ¿Qué impacto tiene corregir estos problemas?",
+                  "opts": [
+                     "    a. Solo mejora la estética visual",
+                     "    b. Mejora la accesibilidad, compatibilidad y posicionamiento SEO",
+                     "    c. Reduce el uso de JavaScript",
+                     "    d. Elimina la necesidad de CSS"
+                  ],
+                  "correct": 1,
+                  "exp": "Es correcta porque responde a un criterio básico de accesibilidad y usabilidad de interfaces web."
+               },
+               {
+                  "title": "DWEC · Pregunta 24",
+                  "q": "24. En el diseño de una interfaz de usuario, se implementa feedback visual inmediato (estado de carga, mensajes de error y éxito) en formularios. ¿Qué principio de diseño de interfaces se está aplicando principalmente?",
+                  "opts": [
+                     "    a. Minimalismo visual",
+                     "    b. Feedback y prevención de errores",
+                     "    c. Optimización de base de datos",
+                     "    d. Reducción de latencia"
+                  ],
+                  "correct": 1,
+                  "exp": "Es correcta porque en React el estado y JSX permiten renderizar la interfaz en función de los datos del componente."
+               },
+               {
+                  "title": "DWEC · Pregunta 25",
+                  "q": "25. En una aplicación web con listas dinámicas de productos, se utiliza delegación de eventos en lugar de asignar un listener a cada botón individual. ¿Cuál es la principal ventaja de esta técnica?",
+                  "opts": [
+                     "    a. Permite evitar el uso de funciones",
+                     "    b. Mejora la mantenibilidad y el rendimiento en elementos dinámicos",
+                     "    c. Elimina la necesidad de DOM",
+                     "    d. Hace innecesario el uso de variables"
+                  ],
+                  "correct": 1,
+                  "exp": "Es correcta porque la opción «Mejora la mantenibilidad y el rendimiento en elementos dinámicos» responde de forma directa al concepto planteado en el enunciado."
+               },
+               {
+                  "title": "DWEC · Pregunta 26",
+                  "q": "26. En un sistema AJAX con Fetch, se implementa AbortController para cancelar solicitudes cuando el usuario sigue escribiendo en un buscador. ¿Qué mejora principal aporta esta técnica?",
+                  "opts": [
+                     "    a. Aumenta el tamaño de las respuestas",
+                     "    b. Evita resultados obsoletos y mejora la experiencia de usuario",
+                     "    c. Reduce la necesidad de usar JSON",
+                     "    d. Elimina errores del servidor"
+                  ],
+                  "correct": 1,
+                  "exp": "Es correcta porque fetch trabaja con promesas y permite gestionar respuestas asíncronas de peticiones HTTP."
+               },
+               {
+                  "title": "DWEC · Pregunta 27",
+                  "q": "27. En una arquitectura cliente-servidor, se identifica como riesgo el “punto único de fallo” en el servidor. ¿Cuál es la medida más adecuada para mitigarlo?",
+                  "opts": [
+                     "    a. Aumentar el tamaño del cliente",
+                     "    b. Reducir el número de usuarios",
+                     "    c. Implementar redundancia y conmutación por error",
+                     "    d. Eliminar el servidor"
+                  ],
+                  "correct": 2,
+                  "exp": "Es correcta porque JavaScript permite añadir comportamiento e interacción en el lado del cliente."
+               },
+               {
+                  "title": "DWEC · Pregunta 28",
+                  "q": "28. En el diseño responsive mobile-first, se define una grid fluida con unidades relativas y media queries para adaptar el layout. ¿Cuál es el objetivo principal de este enfoque?",
+                  "opts": [
+                     "    a. Diseñar primero para escritorio",
+                     "    b. Garantizar adaptación progresiva desde móvil a pantallas mayores",
+                     "    c. Evitar el uso de CSS",
+                     "    d. Reducir el número de componentes"
+                  ],
+                  "correct": 1,
+                  "exp": "Es correcta porque permite adaptar la interfaz a distintos tamaños de pantalla."
+               },
+               {
+                  "title": "DWEC · Pregunta 29",
+                  "q": "29. En el acceso a bases de datos desde una aplicación web, se utilizan consultas parametrizadas en lugar de concatenar strings. ¿Qué problema de seguridad se está evitando directamente?",
+                  "opts": [
+                     "    a. Ataques de denegación de servicio",
+                     "    b. Inyección SQL",
+                     "    c. Pérdida de datos por concurrencia",
+                     "    d. Errores de red"
+                  ],
+                  "correct": 1,
+                  "exp": "Es correcta porque las consultas parametrizadas separan instrucciones SQL y datos de usuario, evitando que la entrada se interprete como código."
+               },
+               {
+                  "title": "DWEC · Pregunta 30",
+                  "q": "30. En el uso de herramientas como DevTools del navegador, se analizan aspectos como el árbol DOM, el rendimiento y el flujo de red. ¿Cuál es el principal valor profesional de estas herramientas en el desarrollo frontend?",
+                  "opts": [
+                     "    a. Sustituir el uso de código",
+                     "    b. Permitir diseñar sin conocimientos técnicos",
+                     "    c. Detectar problemas reales de rendimiento, estructura y comportamiento en tiempo de ejecución",
+                     "    d. Eliminar la necesidad de pruebas"
+                  ],
+                  "correct": 2,
+                  "exp": "Es correcta porque la opción «Detectar problemas reales de rendimiento, estructura y comportamiento en tiempo de ejecución» responde de forma directa al concepto planteado en el enunciado."
+               }
+            ]
+         },
+         {
+            "name": "Desarrollo web en entorno servidor",
+            "code": "DWES",
+            "questions": [
+               {
+                  "title": "DWES · Pregunta 16",
+                  "q": "16. En un entorno típico de desarrollo web con PHP usando VS Code y un servidor local, ¿dónde se ejecuta el código PHP y qué recibe el navegador?",
+                  "opts": [
+                     "    a. el navegador ejecuta directamente el php",
+                     "    b. el php se ejecuta en el servidor y el navegador recibe html, css y javascript",
+                     "    c. el php se ejecuta en el cliente si el archivo es .php",
+                     "    d. el php se ejecuta en el editor de código"
+                  ],
+                  "correct": 1,
+                  "exp": "Es correcta porque HTML estructura el contenido y CSS define su presentación visual."
+               },
+               {
+                  "title": "DWES · Pregunta 17",
+                  "q": "17. En PHP, ¿para qué se utiliza principalmente la superglobal $_POST?",
+                  "opts": [
+                     "    a. para guardar variables internas del servidor",
+                     "    b. para recoger datos enviados desde un formulario con método post",
+                     "    c. para mostrar contenido html",
+                     "    d. para conectarse automáticamente a una base de datos"
+                  ],
+                  "correct": 1,
+                  "exp": "Es correcta porque se ajusta al funcionamiento habitual de PHP y del acceso a datos en aplicaciones web del lado servidor."
+               },
+               {
+                  "title": "DWES · Pregunta 18",
+                  "q": "18. En PHP, ¿qué función se utiliza para mostrar información en pantalla durante una prueba rápida?",
+                  "opts": [
+                     "    a. print()",
+                     "    b. show()",
+                     "    c. display()",
+                     "    d. echo()"
+                  ],
+                  "correct": 0,
+                  "exp": "Es correcta porque se ajusta al funcionamiento habitual de PHP y del acceso a datos en aplicaciones web del lado servidor."
+               },
+               {
+                  "title": "DWES · Pregunta 19",
+                  "q": "19. ¿Cuál es la finalidad principal de phpMyAdmin en un entorno de desarrollo con PHP?",
+                  "opts": [
+                     "    a. editor de código php",
+                     "    b. interfaz web para administrar bases de datos mysql o mariadb",
+                     "    c. servidor de ejecución php",
+                     "    d. extensión de depuración"
+                  ],
+                  "correct": 1,
+                  "exp": "Es correcta porque las consultas parametrizadas separan instrucciones SQL y datos de usuario, evitando que la entrada se interprete como código."
+               },
+               {
+                  "title": "DWES · Pregunta 20",
+                  "q": "20. En SQL, ¿qué sentencia se utiliza para insertar un nuevo registro en una tabla?",
+                  "opts": [
+                     "    a. add into",
+                     "    b. insert into",
+                     "    c. put into",
+                     "    d. update into"
+                  ],
+                  "correct": 1,
+                  "exp": "Es correcta porque las consultas parametrizadas separan instrucciones SQL y datos de usuario, evitando que la entrada se interprete como código."
+               },
+               {
+                  "title": "DWES · Pregunta 21",
+                  "q": "21. En Bootstrap, ¿qué clase permite que un elemento ocupe toda la fila en pantallas pequeñas y la mitad en pantallas medianas?",
+                  "opts": [
+                     "    a. col-6 col-md-12",
+                     "    b. col-12 col-md-6",
+                     "    c. row-12 row-md-6",
+                     "    d. container-12 container-md-6"
+                  ],
+                  "correct": 1,
+                  "exp": "Es correcta porque permite adaptar la interfaz a distintos tamaños de pantalla."
+               },
+               {
+                  "title": "DWES · Pregunta 22",
+                  "q": "22. ¿Cuál es la forma correcta de mostrar una variable dentro de JSX en React?",
+                  "opts": [
+                     "    a. variable",
+                     "    b. ${variable}",
+                     "    c. {variable}",
+                     "    d. (variable)"
+                  ],
+                  "correct": 2,
+                  "exp": "Es correcta porque en React el estado y JSX permiten renderizar la interfaz en función de los datos del componente."
+               },
+               {
+                  "title": "DWES · Pregunta 23",
+                  "q": "23. ¿Qué ventaja aporta usar static $pdo dentro de una función de conexión en PHP?",
+                  "opts": [
+                     "    a. crea automáticamente la base de datos",
+                     "    b. evita abrir múltiples conexiones a la base de datos",
+                     "    c. convierte consultas en preparadas",
+                     "    d. encripta contraseñas"
+                  ],
+                  "correct": 1,
+                  "exp": "Es correcta porque se ajusta al funcionamiento habitual de PHP y del acceso a datos en aplicaciones web del lado servidor."
+               },
+               {
+                  "title": "DWES · Pregunta 24",
+                  "q": "24. En PHP, ¿qué hace la función isset()?",
+                  "opts": [
+                     "    a. comprueba si una variable es numérica",
+                     "    b. verifica si una variable está definida y no es null",
+                     "    c. convierte una variable en string",
+                     "    d. elimina una variable"
+                  ],
+                  "correct": 1,
+                  "exp": "Es correcta porque se ajusta al funcionamiento habitual de PHP y del acceso a datos en aplicaciones web del lado servidor."
+               },
+               {
+                  "title": "DWES · Pregunta 25",
+                  "q": "25. En HTML, ¿qué atributo especifica la URL a la que se envían los datos de un formulario?",
+                  "opts": [
+                     "    a. method",
+                     "    b. action",
+                     "    c. target",
+                     "    d. href"
+                  ],
+                  "correct": 1,
+                  "exp": "Es correcta porque la opción «action» responde de forma directa al concepto planteado en el enunciado."
+               },
+               {
+                  "title": "DWES · Pregunta 26",
+                  "q": "26. En JavaScript, ¿qué devuelve typeof null?",
+                  "opts": [
+                     "    a. null",
+                     "    b. undefined",
+                     "    c. object",
+                     "    d. boolean"
+                  ],
+                  "correct": 2,
+                  "exp": "Es correcta porque JavaScript permite añadir comportamiento e interacción en el lado del cliente."
+               },
+               {
+                  "title": "DWES · Pregunta 27",
+                  "q": "27. En SQL, ¿qué cláusula se utiliza para filtrar resultados tras aplicar funciones de agregación?",
+                  "opts": [
+                     "    a. where",
+                     "    b. filter",
+                     "    c. having",
+                     "    d. group by"
+                  ],
+                  "correct": 2,
+                  "exp": "Es correcta porque las consultas parametrizadas separan instrucciones SQL y datos de usuario, evitando que la entrada se interprete como código."
+               },
+               {
+                  "title": "DWES · Pregunta 28",
+                  "q": "28. En PHP, ¿qué ocurre si se accede a $_GET[‘id’] y no existe ese parámetro?",
+                  "opts": [
+                     "    a. devuelve 0",
+                     "    b. devuelve false sin errores",
+                     "    c. genera una advertencia si no se controla",
+                     "    d. detiene la ejecución"
+                  ],
+                  "correct": 2,
+                  "exp": "Es correcta porque se ajusta al funcionamiento habitual de PHP y del acceso a datos en aplicaciones web del lado servidor."
+               },
+               {
+                  "title": "DWES · Pregunta 29",
+                  "q": "29. En Bootstrap, ¿qué clase permite centrar horizontalmente un elemento mediante márgenes automáticos?",
+                  "opts": [
+                     "    a. text-center",
+                     "    b. align-center",
+                     "    c. mx-auto",
+                     "    d. justify-center"
+                  ],
+                  "correct": 2,
+                  "exp": "Es correcta porque permite adaptar la interfaz a distintos tamaños de pantalla."
+               },
+               {
+                  "title": "DWES · Pregunta 30",
+                  "q": "30. En React, ¿qué hook se utiliza para gestionar el estado en un componente funcional?",
+                  "opts": [
+                     "    a. useEffect",
+                     "    b. useState",
+                     "    c. useContext",
+                     "    d. useReducer"
+                  ],
+                  "correct": 1,
+                  "exp": "Es correcta porque en React el estado y JSX permiten renderizar la interfaz en función de los datos del componente."
+               }
+            ]
+         },
+         {
+            "name": "Despliegue de Aplicaciones Web",
+            "code": "DAW",
+            "questions": [
+               {
+                  "title": "DAW · Pregunta 16",
+                  "q": "16. ¿Qué archivo del sistema se modifica para que el dominio inventario.local apunte a la IP local?",
+                  "opts": [
+                     "    a. httpd.conf",
+                     "    b. my.ini",
+                     "    c. hosts",
+                     "    d. php.ini"
+                  ],
+                  "correct": 2,
+                  "exp": "Es correcta porque la opción «hosts» responde de forma directa al concepto planteado en el enunciado."
+               },
+               {
+                  "title": "DAW · Pregunta 17",
+                  "q": "17. ¿Cuál es la finalidad principal de configurar un Virtual Host en Apache?",
+                  "opts": [
+                     "    a. aumentar la velocidad del procesador",
+                     "    b. permitir múltiples dominios con configuraciones independientes en un mismo servidor",
+                     "    c. sustituir el archivo .htaccess",
+                     "    d. crear automáticamente bases de datos"
+                  ],
+                  "correct": 1,
+                  "exp": "Es correcta porque describe la función propia del servidor web dentro del despliegue de aplicaciones."
+               },
+               {
+                  "title": "DAW · Pregunta 18",
+                  "q": "18. Si no se descomenta la inclusión de httpd-vhosts.conf en httpd.conf, ¿qué ocurrirá?",
+                  "opts": [
+                     "    a. apache no iniciará",
+                     "    b. el certificado ssl dejará de funcionar",
+                     "    c. el host virtual no se cargará correctamente",
+                     "    d. se bloqueará el acceso a mysql"
+                  ],
+                  "correct": 2,
+                  "exp": "Es correcta porque la opción «el host virtual no se cargará correctamente» responde de forma directa al concepto planteado en el enunciado."
+               },
+               {
+                  "title": "DAW · Pregunta 19",
+                  "q": "19. ¿Qué directiva se ajusta para limitar el número máximo de peticiones simultáneas atendidas por Apache?",
+                  "opts": [
+                     "    a. keepalive",
+                     "    b. cacheroot",
+                     "    c. maxrequestworkers",
+                     "    d. timeout"
+                  ],
+                  "correct": 2,
+                  "exp": "Es correcta porque describe la función propia del servidor web dentro del despliegue de aplicaciones."
+               },
+               {
+                  "title": "DAW · Pregunta 20",
+                  "q": "20. ¿Qué módulos deben habilitarse para activar la caché en disco en Apache?",
+                  "opts": [
+                     "    a. mod_ssl y mod_rewrite",
+                     "    b. mod_php y mod_status",
+                     "    c. mod_cache y mod_cache_disk",
+                     "    d. mod_proxy y mod_headers"
+                  ],
+                  "correct": 2,
+                  "exp": "Es correcta porque describe la función propia del servidor web dentro del despliegue de aplicaciones."
+               },
+               {
+                  "title": "DAW · Pregunta 21",
+                  "q": "21. ¿Qué herramienta se utiliza para generar un certificado SSL autofirmado para habilitar HTTPS en un entorno de pruebas?",
+                  "opts": [
+                     "    a. phpmyadmin",
+                     "    b. openssl",
+                     "    c. git",
+                     "    d. apache benchmark"
+                  ],
+                  "correct": 1,
+                  "exp": "Es correcta porque HTTPS/TLS usa certificados para cifrar la comunicación y verificar la identidad del sitio."
+               },
+               {
+                  "title": "DAW · Pregunta 22",
+                  "q": "22. Para que el archivo .htaccess funcione dentro de un directorio en Apache, ¿qué directiva debe estar habilitada?",
+                  "opts": [
+                     "    a. allowoverride all",
+                     "    b. require all granted",
+                     "    c. servername localhost",
+                     "    d. options indexes"
+                  ],
+                  "correct": 0,
+                  "exp": "Es correcta porque describe la función propia del servidor web dentro del despliegue de aplicaciones."
+               },
+               {
+                  "title": "DAW · Pregunta 23",
+                  "q": "23. ¿Qué herramienta de consola permite generar el archivo de credenciales para autenticación básica en Apache?",
+                  "opts": [
+                     "    a. openssl",
+                     "    b. htpasswd",
+                     "    c. mysql",
+                     "    d. netstat"
+                  ],
+                  "correct": 1,
+                  "exp": "Es correcta porque describe la función propia del servidor web dentro del despliegue de aplicaciones."
+               },
+               {
+                  "title": "DAW · Pregunta 24",
+                  "q": "24. ¿Qué técnica se recomienda en PHP para prevenir inyecciones SQL?",
+                  "opts": [
+                     "    a. concatenar variables en la consulta",
+                     "    b. usar consultas preparadas con pdo o mysqli",
+                     "    c. aplicar estilos css al formulario",
+                     "    d. cambiar el puerto de mysql"
+                  ],
+                  "correct": 1,
+                  "exp": "Es correcta porque las consultas parametrizadas separan instrucciones SQL y datos de usuario, evitando que la entrada se interprete como código."
+               },
+               {
+                  "title": "DAW · Pregunta 25",
+                  "q": "25. ¿Qué herramienta se emplea para realizar pruebas básicas de carga en un servidor web?",
+                  "opts": [
+                     "    a. wireshark",
+                     "    b. jenkins",
+                     "    c. apache benchmark",
+                     "    d. docker"
+                  ],
+                  "correct": 2,
+                  "exp": "Es correcta porque describe la función propia del servidor web dentro del despliegue de aplicaciones."
+               },
+               {
+                  "title": "DAW · Pregunta 26",
+                  "q": "26. ¿Qué archivo de configuración principal de Apache contiene las directivas globales del servidor?",
+                  "opts": [
+                     "    a. httpd.conf",
+                     "    b. php.ini",
+                     "    c. my.cnf",
+                     "    d. hosts"
+                  ],
+                  "correct": 0,
+                  "exp": "Es correcta porque describe la función propia del servidor web dentro del despliegue de aplicaciones."
+               },
+               {
+                  "title": "DAW · Pregunta 27",
+                  "q": "27. ¿Qué directiva de Apache se utiliza para definir el directorio raíz desde el que se sirven los archivos de un sitio web?",
+                  "opts": [
+                     "    a. servername",
+                     "    b. documentroot",
+                     "    c. directoryindex",
+                     "    d. alias"
+                  ],
+                  "correct": 1,
+                  "exp": "Es correcta porque describe la función propia del servidor web dentro del despliegue de aplicaciones."
+               },
+               {
+                  "title": "DAW · Pregunta 28",
+                  "q": "28. ¿Qué puerto se utiliza por defecto para conexiones HTTP en un servidor web?",
+                  "opts": [
+                     "    a. 21",
+                     "    b. 22",
+                     "    c. 80",
+                     "    d. 443"
+                  ],
+                  "correct": 2,
+                  "exp": "Es correcta porque describe la función propia del servidor web dentro del despliegue de aplicaciones."
+               },
+               {
+                  "title": "DAW · Pregunta 29",
+                  "q": "29. ¿Qué archivo se utiliza en Apache para definir la página que se carga por defecto al acceder a un directorio?",
+                  "opts": [
+                     "    a. index.php",
+                     "    b. directoryindex",
+                     "    c. default.conf",
+                     "    d. welcome.html"
+                  ],
+                  "correct": 1,
+                  "exp": "Es correcta porque describe la función propia del servidor web dentro del despliegue de aplicaciones."
+               },
+               {
+                  "title": "DAW · Pregunta 30",
+                  "q": "30. ¿Qué ocurre si el puerto 80 ya está siendo utilizado por otro servicio cuando se intenta iniciar Apache?",
+                  "opts": [
+                     "    a. apache cambia automáticamente de puerto",
+                     "    b. apache se inicia sin errores",
+                     "    c. apache no podrá iniciarse correctamente",
+                     "    d. apache desactiva el servicio que usa el puerto"
+                  ],
+                  "correct": 2,
+                  "exp": "Es correcta porque describe la función propia del servidor web dentro del despliegue de aplicaciones."
+               }
+            ]
+         },
+         {
+            "name": "Diseño de Interfaces",
+            "code": "DIW",
+            "questions": [
+               {
+                  "title": "DIW · Pregunta 16",
+                  "q": "16. En el diseño de una interfaz responsiva para una tienda online, ¿qué decisión refleja mejor una correcta adaptación al entorno móvil?",
+                  "opts": [
+                     "    a. mantener diseño horizontal",
+                     "    b. reorganizar en una sola columna con menú simplificado",
+                     "    c. reducir tamaños sin cambiar estructura",
+                     "    d. eliminar contenido visual"
+                  ],
+                  "correct": 1,
+                  "exp": "Es correcta porque la opción «reorganizar en una sola columna con menú simplificado» responde de forma directa al concepto planteado en el enunciado."
+               },
+               {
+                  "title": "DIW · Pregunta 17",
+                  "q": "17. En un mapa de navegación bien diseñado para una web de comercio electrónico, ¿qué elemento es clave para mejorar la experiencia de usuario?",
+                  "opts": [
+                     "    a. menús redundantes",
+                     "    b. elementos clave visibles como búsqueda y carrito",
+                     "    c. ocultar categorías",
+                     "    d. eliminar iconos"
+                  ],
+                  "correct": 1,
+                  "exp": "Es correcta porque la opción «elementos clave visibles como búsqueda y carrito» responde de forma directa al concepto planteado en el enunciado."
+               },
+               {
+                  "title": "DIW · Pregunta 18",
+                  "q": "18. En el uso combinado de CSS en línea, interno y externo, ¿cuál es la principal desventaja del estilo en línea?",
+                  "opts": [
+                     "    a. no permite estilos",
+                     "    b. menor prioridad",
+                     "    c. dificulta mantenimiento y reutilización",
+                     "    d. incompatibilidad"
+                  ],
+                  "correct": 2,
+                  "exp": "Es correcta porque la opción «dificulta mantenimiento y reutilización» responde de forma directa al concepto planteado en el enunciado."
+               },
+               {
+                  "title": "DIW · Pregunta 19",
+                  "q": "19. Al diseñar una hoja de estilos específica para impresión, ¿cuál es la finalidad principal de usar media='print'?",
+                  "opts": [
+                     "    a. animaciones",
+                     "    b. rendimiento",
+                     "    c. adaptar contenido para impresión",
+                     "    d. modificar javascript"
+                  ],
+                  "correct": 2,
+                  "exp": "Es correcta porque la opción «adaptar contenido para impresión» responde de forma directa al concepto planteado en el enunciado."
+               },
+               {
+                  "title": "DIW · Pregunta 20",
+                  "q": "20. ¿Qué función tiene el atributo alt en imágenes?",
+                  "opts": [
+                     "    a. mejorar calidad",
+                     "    b. acelerar carga",
+                     "    c. mejorar accesibilidad",
+                     "    d. aplicar estilos"
+                  ],
+                  "correct": 2,
+                  "exp": "Es correcta porque responde a un criterio básico de accesibilidad y usabilidad de interfaces web."
+               },
+               {
+                  "title": "DIW · Pregunta 21",
+                  "q": "21. ¿Qué hace loading=‘lazy’ en imágenes?",
+                  "opts": [
+                     "    a. mejora diseño",
+                     "    b. activa animaciones",
+                     "    c. retrasa carga de imágenes",
+                     "    d. mejora resolución"
+                  ],
+                  "correct": 2,
+                  "exp": "Es correcta porque la opción «retrasa carga de imágenes» responde de forma directa al concepto planteado en el enunciado."
+               },
+               {
+                  "title": "DIW · Pregunta 22",
+                  "q": "22. En la integración de audio en una página web, ¿qué función cumple el atributo controls?",
+                  "opts": [
+                     "    a. edición",
+                     "    b. reproducción automática",
+                     "    c. mostrar controles de usuario",
+                     "    d. mejorar sonido"
+                  ],
+                  "correct": 2,
+                  "exp": "Es correcta porque la opción «mostrar controles de usuario» responde de forma directa al concepto planteado en el enunciado."
+               },
+               {
+                  "title": "DIW · Pregunta 23",
+                  "q": "23. ¿Qué ventaja tienen transformaciones CSS como scale o rotate?",
+                  "opts": [
+                     "    a. mayor complejidad",
+                     "    b. mejor rendimiento",
+                     "    c. uso exclusivo en svg",
+                     "    d. sustituyen javascript"
+                  ],
+                  "correct": 1,
+                  "exp": "Es correcta porque la opción «mejor rendimiento» responde de forma directa al concepto planteado en el enunciado."
+               },
+               {
+                  "title": "DIW · Pregunta 24",
+                  "q": "24. Cuando se sincroniza una animación con un sonido mediante JavaScript, ¿qué acción es clave para garantizar la coherencia temporal?",
+                  "opts": [
+                     "    a. reducir duración de la animación",
+                     "    b. reiniciar audio antes de reproducirlo en cada interacción",
+                     "    c. eliminar transiciones css",
+                     "    d. usar solo eventos de scroll"
+                  ],
+                  "correct": 1,
+                  "exp": "Es correcta porque JavaScript permite añadir comportamiento e interacción en el lado del cliente."
+               },
+               {
+                  "title": "DIW · Pregunta 25",
+                  "q": "25. Estás optimizando el espacio en pantalla de una aplicación móvil y necesitas que el usuario elija una opción de una lista sin ocupar mucho sitio. ¿Qué etiqueta HTML es la adecuada para este propósito?",
+                  "opts": [
+                     "a) <button>",
+                     "b) <select> ",
+                     "c) <iframe>",
+                     "d) <video>"
+                  ],
+                  "correct": 1,
+                  "exp": "Es correcta porque la opción «b) <select>» responde de forma directa al concepto planteado en el enunciado."
+               },
+               {
+                  "title": "DIW · Pregunta 26",
+                  "q": "26. ¿Por qué es importante utilizar un contenedor con proporción, por ejemplo 16:9, al incrustar vídeos responsivos?",
+                  "opts": [
+                     "    a. reducir tamaño",
+                     "    b. mantener proporción",
+                     "    c. mejorar calidad",
+                     "    d. activar controles"
+                  ],
+                  "correct": 1,
+                  "exp": "Es correcta porque los contenedores empaquetan la aplicación y sus dependencias en un entorno reproducible."
+               },
+               {
+                  "title": "DIW · Pregunta 27",
+                  "q": "27. En una auditoría de accesibilidad basada en WCAG, ¿qué principio se vulnera si una web no puede navegarse con teclado?",
+                  "opts": [
+                     "    a. perceptible",
+                     "    b. operable",
+                     "    c. comprensible",
+                     "    d. robusto"
+                  ],
+                  "correct": 1,
+                  "exp": "Es correcta porque responde a un criterio básico de accesibilidad y usabilidad de interfaces web."
+               },
+               {
+                  "title": "DIW · Pregunta 28",
+                  "q": "28. En pruebas heurísticas de usabilidad, si un usuario no recibe confirmación tras enviar un formulario, ¿qué principio se está incumpliendo?",
+                  "opts": [
+                     "    a. flexibilidad",
+                     "    b. visibilidad del estado del sistema",
+                     "    c. prevención de errores",
+                     "    d. diseño estético"
+                  ],
+                  "correct": 1,
+                  "exp": "Es correcta porque en React el estado y JSX permiten renderizar la interfaz en función de los datos del componente."
+               },
+               {
+                  "title": "DIW · Pregunta 29",
+                  "q": "29. En el diseño UX de una plataforma de adopción de mascotas, ¿qué elemento favorece una arquitectura de la información clara?",
+                  "opts": [
+                     "    a. contenido sin estructura",
+                     "    b. organización en categorías",
+                     "    c. ocultar navegación",
+                     "    d. solo texto"
+                  ],
+                  "correct": 1,
+                  "exp": "Es correcta porque la opción «organización en categorías» responde de forma directa al concepto planteado en el enunciado."
+               },
+               {
+                  "title": "DIW · Pregunta 30",
+                  "q": "30. En una landing page orientada a conversión, ¿qué estrategia aumenta la probabilidad de que el usuario complete un formulario?",
+                  "opts": [
+                     "    a. enlaces externos",
+                     "    b. cta visibles y claros",
+                     "    c. ocultar formulario",
+                     "    d. bajo contraste"
+                  ],
+                  "correct": 1,
+                  "exp": "Es correcta porque la opción «cta visibles y claros» responde de forma directa al concepto planteado en el enunciado."
+               }
+            ]
+         }
+      ];
+      const letters = ["A", "B", "C", "D"];
+      const elBrandTitle = document.getElementById("brandTitle");
+      const elSubtitle = document.getElementById("subtitle");
+      const elCounter = document.getElementById("counter");
+      const elProgress = document.getElementById("progress");
+      const elKicker = document.getElementById("kicker");
+      const elQuestion = document.getElementById("question");
+      const elHome = document.getElementById("home");
+      const elOptions = document.getElementById("options");
+      const elFooter = document.getElementById("footer");
+      const elHint = document.getElementById("hint");
+      const elExplainBox = document.getElementById("explainBox");
+      const elExplainText = document.getElementById("explainText");
+      const elExplainTiny = document.getElementById("explainTiny");
+      const elStatePill = document.getElementById("statePill");
+      const btnPrev = document.getElementById("btnPrev");
+      const btnNext = document.getElementById("btnNext");
+      const btnReset = document.getElementById("btnReset");
+      const btnHome = document.getElementById("btnHome");
+      const elResult = document.getElementById("result");
+      const elScore = document.getElementById("score");
+      const elResultText = document.getElementById("resultText");
+      const btnRestart2 = document.getElementById("btnRestart2");
+      const btnHome2 = document.getElementById("btnHome2");
+      let currentSubject = null;
+      let quiz = [];
+      let i = 0;
+      let phase = "home";
+      let picks = [];
+      let checked = [];
+      function pct(n) { return Math.round(n * 100) + "%"; }
+      function setSubject(index) {
+         currentSubject = subjects[index];
+         quiz = currentSubject.questions;
+         i = 0;
+         phase = "question";
+         picks = Array(quiz.length).fill(null);
+         checked = Array(quiz.length).fill(false);
+         elResult.classList.remove("show");
+         render();
+      }
+      function renderHome() {
+         currentSubject = null;
+         quiz = [];
+         i = 0;
+         phase = "home";
+         elBrandTitle.textContent = "Quiz · 2º DAW";
+         elSubtitle.textContent = "";
+         elCounter.textContent = "Inicio";
+         elProgress.style.width = "0%";
+         elKicker.textContent = "Selecciona asignatura";
+         elQuestion.textContent = "¿Qué quiz quieres practicar?";
+         elStatePill.style.display = "none";
+         elOptions.innerHTML = "";
+         elExplainBox.classList.remove("show");
+         elResult.classList.remove("show");
+         elFooter.style.display = "none";
+         elHome.style.display = "grid";
+         elHome.innerHTML = '<div class="subjectGrid" id="subjectGrid"></div><div class="hint"> </div>';
+         const grid = document.getElementById("subjectGrid");
+         subjects.forEach((s, idx) => {
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = "subject";
+            btn.innerHTML = `<strong>${s.code} · ${s.name}</strong><span>${s.questions.length} preguntas </span>`;
+            btn.addEventListener("click", () => setSubject(idx));
+            grid.appendChild(btn);
+         });
+      }
+      function render() {
+         if (phase === "home") { renderHome(); return; }
+         if (i >= quiz.length) { showResult(); return; }
+         const q = quiz[i];
+         elHome.style.display = "none";
+         elFooter.style.display = "flex";
+         elResult.classList.remove("show");
+         elBrandTitle.textContent = `Quiz · ${currentSubject.code}`;
+         elSubtitle.textContent = `${currentSubject.name} · ${quiz.length} preguntas`;
+         elCounter.textContent = `${i + 1} / ${quiz.length}`;
+         elProgress.style.width = pct((i) / (quiz.length - 1 || 1));
+         elKicker.textContent = phase === "question" ? `Pregunta · ${q.title}` : `Corrección · ${q.title}`;
+         elQuestion.textContent = q.q;
+         elExplainBox.classList.remove("show");
+         elStatePill.style.display = "none";
+         elStatePill.className = "pill";
+         elStatePill.textContent = "";
+         elOptions.innerHTML = "";
+         q.opts.forEach((txt, idxOpt) => {
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = "option";
+            const badge = document.createElement("div");
+            badge.className = "badge";
+            badge.textContent = letters[idxOpt] || String.fromCharCode(65 + idxOpt);
+            const span = document.createElement("div");
+            span.className = "optText";
+            span.textContent = txt;
+            btn.appendChild(badge);
+            btn.appendChild(span);
+            const picked = picks[i] === idxOpt;
+            const isCorrect = idxOpt === q.correct;
+            if (phase === "question") {
+               btn.disabled = false;
+               btn.addEventListener("click", () => {
+                  picks[i] = idxOpt;
+                  document.querySelectorAll("button.option").forEach(b => b.classList.remove("selected", "correct", "wrong"));
+                  btn.classList.add("selected");
+                  elHint.textContent = "Seleccionado. Pulsa “Siguiente” para ver la corrección y explicación.";
+               });
+               if (picked) {
+                  btn.classList.add("selected");
+                  elHint.textContent = "Seleccionado. Pulsa “Siguiente” para ver la corrección y explicación.";
+               } else if (picks[i] == null) {
+                  elHint.textContent = "Selecciona una opción. Después, avanza para ver la corrección y explicación.";
+               }
+            } else {
+               btn.disabled = true;
+               if (isCorrect) btn.classList.add("correct");
+               if (picked && !isCorrect) btn.classList.add("wrong");
+               elExplainBox.classList.add("show");
+               elExplainText.textContent = q.exp;
+               const pickedTxt = picks[i] == null ? "—" : letters[picks[i]];
+               const correctTxt = letters[q.correct];
+               elExplainTiny.textContent = `Tu respuesta: ${pickedTxt} · Correcta según hoja de soluciones: ${correctTxt}`;
+               elStatePill.style.display = "inline-flex";
+               if (picks[i] === q.correct) {
+                  elStatePill.textContent = "✅ Correcta";
+                  elStatePill.style.borderColor = "rgba(34,197,94,.45)";
+                  elStatePill.style.background = "rgba(34,197,94,.12)";
+               } else {
+                  elStatePill.textContent = "❌ Incorrecta";
+                  elStatePill.style.borderColor = "rgba(239,68,68,.45)";
+                  elStatePill.style.background = "rgba(239,68,68,.10)";
+               }
+               elHint.textContent = "Ya está corregida. Pulsa “Siguiente” para continuar.";
+            }
+            elOptions.appendChild(btn);
+         });
+         btnPrev.disabled = (i === 0 && phase === "question");
+         btnNext.disabled = false;
+         btnNext.textContent = phase === "question" ? "Siguiente →" : (i === quiz.length - 1 ? "Finalizar →" : "Siguiente →");
+      }
+      function next() {
+         if (phase === "home" || i >= quiz.length) return;
+         if (phase === "question") {
+            if (picks[i] == null) { elHint.textContent = "Te falta elegir una opción. No te escaquees."; return; }
+            phase = "answer";
+            checked[i] = true;
+            render();
+            return;
+         }
+         phase = "question";
+         i += 1;
+         render();
+      }
+      function prev() {
+         if (phase === "home" || (i === 0 && phase === "question")) return;
+         if (phase === "answer") { phase = "question"; render(); return; }
+         i -= 1;
+         phase = checked[i] ? "answer" : "question";
+         render();
+      }
+      function resetAll() {
+         if (!currentSubject) { renderHome(); return; }
+         const idx = subjects.indexOf(currentSubject);
+         setSubject(idx);
+      }
+      function showResult() {
+         const total = quiz.length;
+         let ok = 0;
+         for (let k = 0; k < total; k++) if (picks[k] === quiz[k].correct) ok++;
+         elScore.textContent = `${ok} / ${total}`;
+         const ratio = ok / total;
+         let msg;
+         if (ratio === 1) msg = "Perfecto. Puedes salir a la calle sin miedo a un 500.";
+         else if (ratio >= .75) msg = "Muy bien. Alguna cosa floja, pero nada que no arregle un repaso corto.";
+         else if (ratio >= .5) msg = "Aprobado raspado. Te salva la campana… por ahora.";
+         else msg = "Hoy no. Repasa y vuelve a intentarlo; el servidor no perdona.";
+         elResultText.textContent = `${currentSubject.name} · ${msg}`;
+         elOptions.innerHTML = "";
+         elHome.style.display = "none";
+         elFooter.style.display = "none";
+         elExplainBox.classList.remove("show");
+         elStatePill.style.display = "none";
+         elProgress.style.width = "100%";
+         elKicker.textContent = "Resultado";
+         elQuestion.textContent = "Fin del quiz";
+         elResult.classList.add("show");
+      }
+      btnNext.addEventListener("click", next);
+      btnPrev.addEventListener("click", prev);
+      btnReset.addEventListener("click", resetAll);
+      btnRestart2.addEventListener("click", resetAll);
+      btnHome.addEventListener("click", renderHome);
+      btnHome2.addEventListener("click", renderHome);
+      renderHome();
+   </script>
+</body>
+
+</html>
